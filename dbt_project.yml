@@ -1,0 +1,39 @@
+name: 'northwind'
+version: '1.0.0'
+config-version: 2
+
+profile: 'northwind'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+snapshot-paths: ["snapshots"]
+analysis-paths: ["analyses"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  northwind:
+    staging:
+      # Staging is where the JSON is parsed. Materialize as tables so it happens ONCE;
+      # every downstream model + test then reads flat columnar data instead of re-parsing.
+      +materialized: table
+      +schema: staging
+    intermediate:
+      # Cheap conforming/aggregation over the staging tables -> views (no extra storage).
+      +materialized: view
+      +schema: intermediate
+    marts:
+      +materialized: table
+      +schema: marts
+
+seeds:
+  northwind:
+    +schema: seeds
+
+# Per-client on-the-wire shapes differ. Source is a single verbatim-JSON landing table.
+# Note: models/adhoc, models/legacy, models/reporting and models/spider are deliberately
+# left unconfigured here — they land in the target schema, exactly as they would in a
+# warehouse that grew without anyone tidying up after it.

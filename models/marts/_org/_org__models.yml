@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: dim_payer
+    description: "Canonical payer dimension from seed_payers."
+    columns:
+      - name: payer_id
+        tests: [not_null, unique]
+  - name: dim_drg
+    description: "Unified DRG dimension. Keyed on (drg_code, drg_type); MS and APR DRG codes overlap numerically."
+    columns:
+      - name: drg_code
+        tests: [not_null]
+  - name: dim_diagnosis
+    description: "Canonical ICD-10 diagnosis dimension from seed_icd10."
+    columns:
+      - name: diagnosis_code
+        tests: [not_null, unique]
+  - name: fct_org_claims
+    description: "Org-wide claim fact with canonical payer (P0x mapped via payer_xref) + encounter context."
+    columns:
+      - name: claim_id
+        tests: [not_null]
+  - name: fct_org_denial_rate_by_payer
+    description: "Denial rate by canonical payer across all clients."
+  - name: fct_org_charges_by_client
+    description: "Total charges by client, in USD."
+    columns:
+      - name: client_id
+        tests: [not_null, unique]
+  - name: fct_org_ar_summary
+    description: "Outstanding A/R by client and payer type."
+  - name: fct_org_coding_opportunities
+    description: "Diagnosis coverage vs ICD-10 seed; unmatched_code_rate reports codes that did not normalize."
+    columns:
+      - name: client_key
+        tests: [not_null, unique]
+  - name: fct_org_data_quality
+    description: "Data-quality scorecard: negative LOS, unmapped payers, unknown DRG, missing dx."
+    columns:
+      - name: client_id
+        tests: [not_null, unique]
+  - name: dim_facility
+    description: "Org facility dimension keyed on (client_id, facility_id)."
+  - name: fct_org_procedure_volume
+    description: "Procedure volume/charge across clients from conformed service lines."
+  - name: fct_org_los_distribution
+    description: "LOS buckets by client, including a negative bucket for metro_childrens data-quality rows."
+    columns:
+      - name: client_id
+        tests: [not_null, unique]
+  - name: fct_org_denials_by_reason
+    description: "Denied-claim counts by CARC reason, cross-checked against seed_carc."
+  - name: fct_org_monthly_charges
+    description: "Monthly charge/paid trend by client (encounter admit month)."
+  - name: fct_org_encounter_summary
+    description: "Encounter mix by client and encounter_type."

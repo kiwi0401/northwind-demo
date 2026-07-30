@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: int_harbor__encounters
+    description: "Conformed encounter grain (one row per deduped visit; fan-out children pre-aggregated)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: int_harbor__claim_financials
+    description: "Conformed claim grain: charge, paid, unpaid, is_denied, denial_reason. Deduped."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: int_harbor__diagnoses
+    description: "Conformed diagnosis grain (encounter, dx_seq). Dotted ICD; canonical POA."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: int_harbor__service_lines
+    description: "Conformed service-line grain (claim, line_no). USD dollars."
+    columns:
+      - name: claim_id
+        tests: [not_null]

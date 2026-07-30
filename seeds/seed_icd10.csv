@@ -1,0 +1,26 @@
+diagnosis_code,description,chronic_flag
+J18.9,Pneumonia unspecified organism,0
+I10,Essential hypertension,1
+E11.9,Type 2 diabetes mellitus without complications,1
+N17.9,Acute kidney failure,0
+A41.9,Sepsis unspecified organism,0
+I50.9,Heart failure unspecified,1
+J44.1,COPD with acute exacerbation,1
+K35.80,Unspecified acute appendicitis,0
+M17.11,Unilateral primary osteoarthritis right knee,1
+S72.001A,Fracture of neck of right femur,0
+O80,Encounter for full-term uncomplicated delivery,0
+P07.30,Preterm newborn unspecified weeks,0
+C50.911,Malignant neoplasm right female breast,1
+I63.9,Cerebral infarction unspecified,0
+R07.9,Chest pain unspecified,0
+E86.0,Dehydration,0
+D64.9,Anemia unspecified,1
+F32.9,Major depressive disorder single episode,1
+J45.909,Unspecified asthma uncomplicated,1
+N39.0,Urinary tract infection site not specified,0
+K21.9,GERD without esophagitis,1
+Z38.00,Single liveborn infant born in hospital,0
+G93.40,Encephalopathy unspecified,0
+I21.4,Non-ST elevation myocardial infarction,0
+T81.4XXA,Infection following a procedure,0

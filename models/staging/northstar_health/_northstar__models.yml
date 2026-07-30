@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: stg_northstar__encounters
+    description: "Encounter grain. Dialect A flat blob; ISO-Z timestamps stripped and cast."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: stg_northstar__claims
+    description: "Claim grain. Charge coalesced across v1 total_charge / v2 charge_amount; cents→USD."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+      - name: total_charge_usd
+        tests: [not_null]
+  - name: stg_northstar__service_lines
+    description: "Service-line grain (fan-out). Cents→USD."
+    columns:
+      - name: claim_id
+        tests: [not_null]
+  - name: stg_northstar__diagnoses
+    description: "Diagnosis grain with dx_seq; seq=1 is primary. ICD canonicalized to dotted."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: stg_northstar__procedures
+    description: "Procedure grain (ICD-10-PCS)."
+  - name: stg_northstar__drg
+    description: "One MS-DRG per encounter."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: stg_northstar__remittance
+    description: "835 per claim. is_denied from denial_codes[] non-empty."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: stg_northstar__authorizations
+    description: "Auth per encounter; block may be absent (not-sent semantics)."
+  - name: stg_northstar__documents
+    description: "Clinical document grain."

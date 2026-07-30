@@ -1,0 +1,22 @@
+# Northwind demo profile — points dbt at YOUR private branch of the demo warehouse.
+#
+# Get the values from SignalPilot: add the demo connection on the /demo-db page,
+# create an API key under Settings -> API Keys, and ask your agent for the dbt
+# profile (get_dbt_profile) — or export them here:
+#
+#   export NORTHWIND_PG_HOST=<branch-id>.<region>.xata.tech
+#   export NORTHWIND_PG_USER=xata
+#   export NORTHWIND_PG_PASSWORD=<branch password>
+northwind:
+  target: demo
+  outputs:
+    demo:
+      type: postgres
+      host: "{{ env_var('NORTHWIND_PG_HOST') }}"
+      port: "{{ env_var('NORTHWIND_PG_PORT', '5432') | int }}"
+      user: "{{ env_var('NORTHWIND_PG_USER', 'xata') }}"
+      password: "{{ env_var('NORTHWIND_PG_PASSWORD') }}"
+      dbname: "{{ env_var('NORTHWIND_PG_DBNAME', 'xata') }}"
+      schema: analytics
+      threads: 8
+      sslmode: require

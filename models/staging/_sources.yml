@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: >
+      Verbatim per-client JSON landing. One row per encounter blob, loaded exactly
+      as the client sent it. Every client uses a different on-the-wire shape; all
+      parsing happens in dbt. See CLIENT_FORMATS.md for each client's dialect.
+    tables:
+      - name: client_blob
+        description: "source_client, load_id, blob(JSON). Filter by source_client in every staging model."
+        columns:
+          - name: source_client
+            description: "Which client sent the blob (drives which staging models read it)."
+          - name: load_id
+            description: "Monotonic load sequence within a client. Higher = loaded later."
+          - name: blob
+            description: "The entire client document, verbatim, as a JSON value."

@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: stg_cedar__encounters
+    description: "Encounter grain. Dialect C events[] pivoted to kind='encounter'; epoch-ms start/end → TIMESTAMP. One encounter per case."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+      - name: case_id
+        tests: [not_null]
+  - name: stg_cedar__claims
+    description: "Claim grain. Rolled up from kind='charge' events (dialect C has no claim object). Money in dollars; no format/payer sent."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+      - name: total_charge_usd
+        tests: [not_null]
+  - name: stg_cedar__service_lines
+    description: "Service-line grain (fan-out) from kind='charge'. Carries case_id for encounter resolution."
+    columns:
+      - name: claim_id
+        tests: [not_null]
+  - name: stg_cedar__diagnoses
+    description: "Diagnosis grain from kind='diagnosis'. dx_seq from array order; seq=1 primary. ICD canonicalized to dotted."
+    columns:
+      - name: case_id
+        tests: [not_null]
+  - name: stg_cedar__procedures
+    description: "Procedure grain from kind='procedure' (code only)."
+    columns:
+      - name: case_id
+        tests: [not_null]
+  - name: stg_cedar__remittance
+    description: "Payment grain from kind='payment'. is_denied = paid==0; denial_reason = first carc[]."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: stg_cedar__documents
+    description: "Clinical note grain from kind='note' (text only)."
+    columns:
+      - name: case_id
+        tests: [not_null]

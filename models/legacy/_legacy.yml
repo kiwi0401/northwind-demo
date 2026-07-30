@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: legacy_finance_rollup
+    description: "Deprecated pre-2024 finance rollup. Covers 3 of 9 clients only. Use fct_org_claims."
+  - name: legacy_denials_2023
+    description: "Deprecated denial rollup off legacy_finance_rollup. Use fct_org_denial_rate_by_payer."

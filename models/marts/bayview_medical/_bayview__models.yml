@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: fct_bayview__encounters
+    description: "Client encounter fact (one row per encounter)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: fct_bayview__claims
+    description: "Client claim fact enriched with encounter context; carries denial_reason."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: fct_bayview__denials
+    description: "Denied claims only (true CO-CARC denials)."
+  - name: dim_bayview__facility
+    description: "Distinct facility dimension with encounter volume."
+    columns:
+      - name: facility_id
+        tests: [not_null, unique]
+  - name: fct_bayview__drg_summary
+    description: "APR-DRG rollup keyed on (drg_code, drg_type) to survive cross-client DRG code overlap."
+    columns:
+      - name: drg_code
+        tests: [not_null]

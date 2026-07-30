@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: fct_northstar__encounters
+    description: "Client encounter fact (one row per encounter)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: fct_northstar__claims
+    description: "Client claim fact enriched with encounter context."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: fct_northstar__denials
+    description: "Denied claims only (is_denied = true)."

@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: fct_valley__encounters
+    description: "Client encounter fact (one row per encounter)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: fct_valley__claims
+    description: "Client claim fact enriched with encounter context."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: fct_valley__denials
+    description: "Denied claims only (is_denied = paid==0)."
+  - name: dim_valley__facility
+    description: "Distinct facilities on valley_care encounters."
+    columns:
+      - name: facility_id
+        tests: [not_null, unique]
+  - name: fct_valley__version_drift
+    description: "Counts by schema_version; poa-null rate reaches 100% in v3.0, and all three diagnosis kind names are captured."
+    columns:
+      - name: schema_version
+        tests: [not_null, unique]

@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: fct_summit__encounters
+    description: "Client encounter fact (one row per encounter)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: fct_summit__claims
+    description: "Client claim fact enriched with encounter context."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: fct_summit__denials
+    description: "Denied claims only (is_denied = true) with CARC denial_reason."
+  - name: dim_summit__facility
+    description: "Distinct facility dimension."
+    columns:
+      - name: facility_id
+        tests: [not_null, unique]
+  - name: fct_summit__service_line_detail
+    description: "Service-line detail fact: one row per (claim, line) with encounter/claim context."
+  - name: fct_summit__adjustments
+    description: "Adjustment fact: abs'd magnitude plus denial-vs-routine flag per adj entry."

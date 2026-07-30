@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: int_riverside__claim_financials
+    description: "Conformed claim grain: charge, paid, unpaid, is_denied, denial_reason. payer_id RAW (local P0x)."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+      - name: payer_id
+        tests: [not_null]
+  - name: int_riverside__encounters
+    description: "Conformed encounter grain (one row per encounter; fan-out children pre-aggregated)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: int_riverside__diagnoses
+    description: "Conformed diagnosis grain, one row per (encounter, dx). Dotted ICD, canonical POA."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: int_riverside__service_lines
+    description: "Conformed service-line grain, one row per (claim, line). Charges in USD dollars."
+    columns:
+      - name: claim_id
+        tests: [not_null]

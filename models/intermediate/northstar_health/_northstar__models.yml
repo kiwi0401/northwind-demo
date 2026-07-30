@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: int_northstar__claim_financials
+    description: "Conformed claim grain: charge, paid, unpaid, is_denied, denial_reason."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: int_northstar__encounters
+    description: "Conformed encounter grain (one row per encounter; fan-out children pre-aggregated)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]

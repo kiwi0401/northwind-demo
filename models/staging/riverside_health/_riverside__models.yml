@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: stg_riverside__encounters
+    description: "Encounter grain. Dialect A flat blob; ISO-Z timestamps stripped and cast."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: stg_riverside__claims
+    description: "Claim grain. Single v1.0 total_charge (no rename); cents to USD. payer_id kept raw (local P0x)."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+      - name: total_charge_usd
+        tests: [not_null]
+      - name: payer_id
+        tests: [not_null]
+  - name: stg_riverside__service_lines
+    description: "Service-line grain (fan-out). Cents→USD."
+    columns:
+      - name: claim_id
+        tests: [not_null]
+  - name: stg_riverside__diagnoses
+    description: "Diagnosis grain with dx_seq; seq=1 is primary. ICD canonicalized to dotted."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: stg_riverside__procedures
+    description: "Procedure grain (ICD-10-PCS)."
+  - name: stg_riverside__drg
+    description: "One MS-DRG per encounter."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: stg_riverside__remittance
+    description: "835 per claim. is_denied from denial_codes[] non-empty; denial_reason = first code."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: stg_riverside__authorizations
+    description: "Auth per encounter; block may be absent (not-sent semantics)."
+  - name: stg_riverside__documents
+    description: "Clinical document grain."

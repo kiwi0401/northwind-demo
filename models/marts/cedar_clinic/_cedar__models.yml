@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: fct_cedar__encounters
+    description: "Client encounter fact (one row per encounter)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: fct_cedar__claims
+    description: "Client claim fact enriched with encounter context."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: fct_cedar__denials
+    description: "Denied claims only (is_denied = paid==0)."
+  - name: dim_cedar__facility
+    description: "Distinct facilities with encounter volume."
+    columns:
+      - name: facility_id
+        tests: [not_null, unique]
+  - name: fct_cedar__zero_pay_denials
+    description: "Zero-pay denials (paid==0); flags whether the delivered carc is a denial CARC."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]

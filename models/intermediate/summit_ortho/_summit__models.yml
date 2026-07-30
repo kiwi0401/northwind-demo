@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: int_summit__encounters
+    description: "Conformed encounter grain (one row per acct_id; fan-out children pre-aggregated). No DRG, no auth."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: int_summit__claim_financials
+    description: "Conformed claim grain. Encounter charges attributed to the primary claim; is_denied from abs'd neg adj."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: int_summit__diagnoses
+    description: "Conformed diagnosis grain (encounter, dx). Dotted ICD from pipe tokens; dx_seq=1 primary; POA null."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: int_summit__service_lines
+    description: "Conformed service-line grain (claim, line). Lines attached to encounter's primary claim."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: int_summit__documentation
+    description: "Conformed documentation grain (encounter, doc) from semicolon-split docs string."

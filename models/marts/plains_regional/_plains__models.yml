@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: fct_plains__encounters
+    description: "Client encounter fact (one row per encounter)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: fct_plains__claims
+    description: "Client claim fact enriched with encounter context."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: fct_plains__denials
+    description: "Denied claims only (is_denied = true) with denial_reason CARC code."
+  - name: dim_plains__facility
+    description: "Facility dimension: one row per distinct facility with encounter volume."
+    columns:
+      - name: facility_id
+        tests: [not_null, unique]
+  - name: fct_plains__auth_not_required
+    description: "Encounters where authorization was not required (absent block = valid state)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+      - name: auth_status
+        tests:
+          - accepted_values:
+              values: ['not_required']

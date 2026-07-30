@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: int_plains__encounters
+    description: "Conformed encounter grain (one row per encounter; fan-out children pre-aggregated)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+      - name: auth_status
+        tests:
+          - accepted_values:
+              values: ['approved', 'pending', 'denied', 'not_required']
+  - name: int_plains__claim_financials
+    description: "Conformed claim grain: charge, paid, unpaid, is_denied, denial_reason (USD dollars)."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: int_plains__diagnoses
+    description: "Conformed diagnosis grain (one per encounter, diagnosis). Dotted ICD, Y/N/U POA."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: int_plains__service_lines
+    description: "Conformed service-line grain (one per claim, line). USD dollars."
+    columns:
+      - name: claim_id
+        tests: [not_null]

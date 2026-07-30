@@ -1,0 +1,10 @@
+drg_code,drg_type,description
+139,APR-DRG,Other pneumonia
+194,APR-DRG,Heart failure
+720,APR-DRG,Septicemia
+301,APR-DRG,Hip joint replacement
+540,APR-DRG,Cesarean delivery
+44,APR-DRG,Intracranial hemorrhage
+140,APR-DRG,COPD
+463,APR-DRG,Kidney/UTI
+640,APR-DRG,Neonate

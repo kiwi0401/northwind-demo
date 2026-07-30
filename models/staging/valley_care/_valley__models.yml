@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: stg_valley__encounters
+    description: "Encounter grain. Dialect C events[] pivoted on kind='encounter'; ISO-Z timestamps stripped. One row per case."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+      - name: case_id
+        tests: [not_null, unique]
+  - name: stg_valley__diagnoses
+    description: "Diagnosis grain. Accepts all three drifting kind names ('dx','diagnosis','diag'). ICD no-dot -> canonical dotted; v3 poa dropped -> null. dx_seq=1 is primary."
+    columns:
+      - name: case_id
+        tests: [not_null]
+  - name: stg_valley__procedures
+    description: "Procedure grain (kind='procedure'). Code only."
+  - name: stg_valley__service_lines
+    description: "Service-line grain (kind='charge'; fan-out). Money USD dollars."
+    columns:
+      - name: claim_id
+        tests: [not_null]
+  - name: stg_valley__claims
+    description: "Claim grain synthesized from charge lines (no claim header in dialect C). total_charge_usd = sum of charges."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+      - name: total_charge_usd
+        tests: [not_null]
+  - name: stg_valley__remittance
+    description: "Payment grain (kind='payment'). is_denied = paid==0; denial_reason = carc[0]."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: stg_valley__documents
+    description: "Clinical note grain (kind='note'). Free-text only."

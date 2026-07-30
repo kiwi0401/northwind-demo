@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: fct_riverside__encounters
+    description: "Client encounter fact (one row per encounter)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: fct_riverside__claims
+    description: "Client claim fact enriched with encounter context. payer_id RAW (local P0x)."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: fct_riverside__denials
+    description: "Denied claims only (is_denied = true)."
+  - name: dim_riverside__payer
+    description: "Payer dim surfacing raw local payer codes (P0x) with claim counts; all unmapped, resolve via org payer_xref."
+    columns:
+      - name: local_payer_code
+        tests: [not_null, unique]
+  - name: fct_riverside__unmapped_payers
+    description: "Distinct local payer codes with claim counts absent from seed_payers; resolve via org payer_xref."
+    columns:
+      - name: local_payer_code
+        tests: [not_null, unique]

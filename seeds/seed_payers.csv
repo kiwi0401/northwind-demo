@@ -1,0 +1,9 @@
+payer_id,payer_name,payer_type
+BCBS,Blue Cross Blue Shield,commercial
+UHC,UnitedHealthcare,commercial
+AETNA,Aetna,commercial
+CIGNA,Cigna,commercial
+MEDCARE,Medicare,government
+MEDCAID,Medicaid,government
+HUMANA,Humana,commercial
+SELFPAY,Self Pay,self

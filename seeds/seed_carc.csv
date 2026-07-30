@@ -1,0 +1,11 @@
+carc_code,carc_group,carc_reason,description,is_denial
+CO-50,CO,50,Not medically necessary,1
+CO-16,CO,16,Claim lacks information,1
+CO-11,CO,11,Diagnosis inconsistent with procedure,1
+CO-197,CO,197,Precert/authorization absent,1
+CO-45,CO,45,Charge exceeds fee schedule,0
+CO-97,CO,97,Payment adjusted bundled,0
+PR-1,PR,1,Deductible amount,0
+PR-2,PR,2,Coinsurance amount,0
+PR-3,PR,3,Copayment amount,0
+OA-23,OA,23,Prior payer adjustment,0

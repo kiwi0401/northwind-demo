@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: fct_metro__encounters
+    description: "Client encounter fact (one row per encounter). LOS may be negative for dirty rows."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: fct_metro__claims
+    description: "Client claim fact enriched with encounter context."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: fct_metro__denials
+    description: "Denied claims only (is_denied = true) with CARC denial_reason."
+  - name: dim_metro__facility
+    description: "Distinct facilities (visit.location_id) with encounter volume."
+    columns:
+      - name: facility_id
+        tests: [not_null, unique]
+  - name: fct_metro__dirty_los
+    description: "Encounters with negative length_of_stay_days (discharge < admit); rows preserved upstream."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]

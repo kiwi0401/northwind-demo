@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: fct_claim_360
+    description: >
+      Comprehensive claim-360 reporting mart. Exactly one row per claim across all active clients.
+      Combines claim financials, the canonically-mapped payer, encounter/DRG/facility context, and
+      per-claim rollups of diagnoses and service lines. Grain is the claim; the row count must equal
+      the number of claims in int_all__claim_financials.
+    columns:
+      - name: claim_id
+        description: Claim identifier (unique only within a client).
+      - name: encounter_id
+        description: Owning encounter (collides across clients; pair with client_id).
+      - name: client_id
+        description: Long client identifier, e.g. bayview_medical.
+        tests: [not_null]
+      - name: claim_format
+        description: Claim wire format (837I / 837P etc.).
+      - name: raw_payer_id
+        description: Payer code as the client sent it (pre-mapping).
+      - name: canonical_payer_id
+        description: Canonical payer id after applying seed_payer_xref (riverside P0x) else passthrough.
+      - name: payer_name
+        description: Canonical payer name from dim_payer.
+      - name: payer_type
+        description: Canonical payer type from dim_payer (Medicare/Medicaid/Commercial/SelfPay).
+      - name: payer_unmapped
+        description: True when the canonical payer id never resolved in dim_payer.
+      - name: total_charge_usd
+        description: Billed charge for the claim, in USD.
+      - name: paid_amount_usd
+        description: Amount paid on the claim, in USD.
+      - name: unpaid_usd
+        description: total_charge_usd minus paid_amount_usd.
+      - name: is_denied
+        description: Whether the claim was denied.
+      - name: denial_reason
+        description: Denial CARC reason when denied, else null.
+      - name: facility_id
+        description: Facility from the encounter.
+      - name: encounter_type
+        description: Encounter type (inpatient/outpatient/emergency).
+      - name: length_of_stay_days
+        description: Encounter length of stay in whole days (may be negative for dirty rows).
+      - name: drg_code
+        description: DRG code from the encounter.
+      - name: drg_type
+        description: DRG system (MS-DRG / APR-DRG).
+      - name: diagnosis_count
+        description: Number of diagnoses documented on the claim's encounter (0 if none).
+      - name: primary_diagnosis_code
+        description: The primary (is_primary) diagnosis code on the encounter, else null.
+      - name: service_line_count
+        description: Number of service lines on the claim (0 if none).
+      - name: service_line_charge_usd
+        description: Sum of the claim's service-line charges, in USD (reconciles to total_charge_usd).

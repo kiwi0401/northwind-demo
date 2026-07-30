@@ -1,0 +1,7 @@
+source_client,local_payer_code,payer_id
+riverside_health,P01,BCBS
+riverside_health,P02,UHC
+riverside_health,P03,AETNA
+riverside_health,P07,MEDCARE
+riverside_health,P09,MEDCAID
+riverside_health,P99,SELFPAY

@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: stg_summit__encounters
+    description: "Encounter grain. Dialect D EMR export; key=account.acct_id, ISO-Z timestamps, top-level facility_id."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: stg_summit__diagnoses
+    description: "Diagnosis grain. Pipe-delimited dx_list exploded with positional dx_seq; ICD dotted; no POA."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: stg_summit__procedures
+    description: "Procedure grain. Pipe-delimited px_list exploded; codes kept as sent."
+  - name: stg_summit__service_lines
+    description: "Service-line grain (fan-out). line_no = charges[] array position; USD dollars."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: stg_summit__claims
+    description: "Claim grain from payments[].claim. No payer/format on wire (null). claim_seq marks the primary claim."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: stg_summit__adjustments
+    description: "Adjustment grain (one per adj[]). Negative amounts abs()'d; is_denial_code applies the CO-50/16/11/197 rule."
+    columns:
+      - name: claim_id
+        tests: [not_null]
+  - name: stg_summit__remittance
+    description: "835 per claim. paid from payments[].amt; is_denied/denial_reason derived from adjustments."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: stg_summit__documents
+    description: "Clinical document grain. Semicolon-delimited docs string split on '; '."

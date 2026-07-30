@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: stg_metro__encounters
+    description: "Encounter grain. Dialect B visit-nested blob; DATE-ONLY timestamps cast directly to midnight TIMESTAMP."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: stg_metro__claims
+    description: "Claim grain. bill_type as claim_format; charges already USD dollars; raw payer kept."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+      - name: total_charge_usd
+        tests: [not_null]
+  - name: stg_metro__service_lines
+    description: "Service-line grain (fan-out) from billing.claim.lines. Amounts in USD dollars."
+    columns:
+      - name: claim_id
+        tests: [not_null]
+  - name: stg_metro__diagnoses
+    description: "Diagnosis grain with dx_seq; seq=1 is primary. ICD dotted via icd_canonical; pediatric POA 1/0/Y/N/U canonicalized."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: stg_metro__procedures
+    description: "Procedure grain (ICD-10-PCS) from billing.codes.px[].icd_pcs."
+  - name: stg_metro__drg
+    description: "One APR-DRG per encounter (billing.codes.drg_apr scalar); drg_type fixed to APR-DRG."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: stg_metro__remittance
+    description: "835 per claim. is_denied from carc[] grp=CO code in (50,16,11,197); adjustments ignored."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: stg_metro__authorizations
+    description: "Auth per encounter; block may be absent (not-sent semantics)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: stg_metro__documents
+    description: "Clinical note grain (notes[]); no author_role in this dialect."

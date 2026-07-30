@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: fct_harbor__encounters
+    description: "Client encounter fact (one row per deduped encounter)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: fct_harbor__claims
+    description: "Client claim fact enriched with encounter context (deduped)."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: fct_harbor__denials
+    description: "Denied claims only (is_denied = true), with CARC denial_reason."
+  - name: dim_harbor__facility
+    description: "Facility dimension: distinct location_id with encounter volume."
+    columns:
+      - name: facility_id
+        tests: [not_null, unique]
+  - name: fct_harbor__resubmissions
+    description: >
+      Resubmission fact (one row per visit_id) from the un-deduped version log. Original vs corrected
+      final version, superseded version count, and paid/charge deltas.
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]

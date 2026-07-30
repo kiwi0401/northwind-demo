@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: int_metro__encounters
+    description: "Conformed encounter grain (one row per encounter; fan-out children pre-aggregated). LOS may be negative for dirty rows."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: int_metro__claim_financials
+    description: "Conformed claim grain: charge, paid, unpaid, is_denied, denial_reason (CARC CO-50/16/11/197)."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: int_metro__diagnoses
+    description: "Conformed diagnosis grain (encounter, dx_seq). Dotted ICD; pediatric POA Y/N/U."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: int_metro__service_lines
+    description: "Conformed service-line grain (claim, line_no). Charges in USD dollars."
+    columns:
+      - name: claim_id
+        tests: [not_null]

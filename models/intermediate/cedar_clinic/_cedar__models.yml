@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: int_cedar__encounters
+    description: "Conformed encounter grain (one row per encounter; fan-out children pre-aggregated to case grain). drg/auth conform to null/false."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: int_cedar__claim_financials
+    description: "Conformed claim grain: charge, paid, unpaid, is_denied (paid==0), denial_reason (first carc[])."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: int_cedar__diagnoses
+    description: "Conformed (encounter, diagnosis) grain. Canonical dotted ICD, dx_seq, POA."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: int_cedar__service_lines
+    description: "Conformed (claim, line) grain. Charges in USD dollars."
+    columns:
+      - name: claim_id
+        tests: [not_null]

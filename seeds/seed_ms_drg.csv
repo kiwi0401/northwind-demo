@@ -1,0 +1,11 @@
+drg_code,drg_type,description,relative_weight
+193,MS-DRG,Simple pneumonia w MCC,1.42
+291,MS-DRG,Heart failure w MCC,1.35
+871,MS-DRG,Septicemia w MCC,1.85
+470,MS-DRG,Major joint replacement,2.05
+765,MS-DRG,Cesarean section w CC/MCC,1.10
+64,MS-DRG,Intracranial hemorrhage,1.70
+190,MS-DRG,COPD w MCC,1.20
+689,MS-DRG,Kidney/UTI w MCC,1.05
+795,MS-DRG,Normal newborn,0.16
+247,MS-DRG,Perc cardiovascular proc,2.10

@@ -1,0 +1,59 @@
+version: 2
+
+models:
+  - name: stg_harbor__blob_latest
+    description: >
+      Dedup driver. Resubmissions collapse to the highest version_no per visit_id (corrected
+      supersedes original). All other harbor staging models read this, so dedup happens once.
+    columns:
+      - name: visit_id
+        tests: [not_null, unique]
+      - name: version_no
+        tests: [not_null]
+  - name: stg_harbor__encounters
+    description: "Encounter grain (deduped visit). Dialect B visit-nested; ISO-Z timestamps stripped and cast."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: stg_harbor__claims
+    description: "Claim grain (deduped). Money already USD dollars; claim_format = bill_type."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+      - name: total_charge_usd
+        tests: [not_null]
+  - name: stg_harbor__service_lines
+    description: "Service-line grain (fan-out) under billing.claim.lines[]. Money USD dollars."
+    columns:
+      - name: claim_id
+        tests: [not_null]
+  - name: stg_harbor__diagnoses
+    description: "Diagnosis grain with dx_seq; seq=1 primary. ICD no-dot canonicalized; POA 1/0 normalized."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: stg_harbor__procedures
+    description: "Procedure grain (ICD-10-PCS) under billing.codes.px[]."
+  - name: stg_harbor__drg
+    description: "One APR-DRG per encounter (billing.codes.drg_apr)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: stg_harbor__remittance
+    description: "835 per claim. is_denied when a carc[] entry is grp=CO and code in (50,16,11,197)."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: stg_harbor__authorizations
+    description: "Auth per encounter; block may be absent (not-sent semantics)."
+  - name: stg_harbor__documents
+    description: "Clinical note grain under notes[]."
+  - name: stg_harbor__resubmissions
+    description: >
+      Un-deduped version log (one row per submitted version). Reads raw source directly, on purpose,
+      to retain every version for the resubmissions mart.
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+      - name: version_no
+        tests: [not_null]

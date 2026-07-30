@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: int_bayview__encounters
+    description: "Conformed encounter grain (one row per encounter; fan-out children pre-aggregated)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: int_bayview__claim_financials
+    description: "Conformed claim grain: charge, paid, unpaid, is_denied, denial_reason (carc CO rule)."
+    columns:
+      - name: claim_id
+        tests: [not_null, unique]
+  - name: int_bayview__diagnoses
+    description: "Conformed diagnosis grain (encounter+dx). ICD dotted, POA canonical."
+    columns:
+      - name: encounter_id
+        tests: [not_null]
+  - name: int_bayview__service_lines
+    description: "Conformed service-line grain (claim+line). Charges in USD dollars."
+    columns:
+      - name: claim_id
+        tests: [not_null]
+  - name: int_bayview__authorizations
+    description: "Conformed authorization grain (one row per encounter)."
+    columns:
+      - name: encounter_id
+        tests: [not_null, unique]
+  - name: int_bayview__documentation
+    description: "Conformed documentation grain (one row per clinical note)."
