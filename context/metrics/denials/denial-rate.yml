@@ -1,0 +1,16 @@
+title: Denial rate
+owner: [analytics-eng, revenue-ops]
+description: Share of claims that were denied, counted per claim across all clients.
+ai_context: |
+  Denied claims divided by all claims, from marts.fct_org_claims where is_denied is set per each client's own source rule.
+  The claim fact has no date; date it by the encounter admit_ts from intermediate.int_all__encounters joined on (client_id, encounter_id).
+  claim_id and encounter_id are unique only within a client, so always join and count distinct on client_id too.
+  Do not use legacy_denials_2023 or legacy_finance_rollup; denial_rate_summary (client grain) and fct_org_denial_rate_by_payer (payer grain) are rollups of the same number.
+  People also say: denials, denial percentage, deny rate, claim denial rate, rejection rate, denied claims share
+sql_hint: |
+  select round(sum(case when c.is_denied then 1 else 0 end) * 1.0 / nullif(count(*), 0), 4) as denial_rate
+  from marts.fct_org_claims c
+  join intermediate.int_all__encounters e
+    on c.encounter_id = e.encounter_id and c.client_id = e.client_id
+  where e.admit_ts >= {{ start_date }} and e.admit_ts < {{ end_date }}
+status: approved
